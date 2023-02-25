@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from posturedetect import Model
+from app.posturedetect import Model
 
 # Create your views here.
 def index(request):
