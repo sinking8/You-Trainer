@@ -47,7 +47,7 @@ import dash_bootstrap_components as dbc
 # )
 
 # -----------------------------------------APP DEFINITION---------------------------------------------------------------
-## Diskcache
+# Diskcache
 import diskcache
 cache = diskcache.Cache("./cache")
 long_callback_manager = DiskcacheLongCallbackManager(cache)
@@ -61,12 +61,18 @@ app = Dash(
 app.title = 'Posture Analyzer'
 
 # -----------------------------------------APP COMPONENTS---------------------------------------------------------------
+
+
 def angle_graph(list1, list2):
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=[i for i in range(0, len(list2))], y=list2, mode='lines', name='Shoulder'))
-    fig.add_trace(go.Scatter(x=[i for i in range(0, len(list1))], y=list1, mode='lines', name='Hip'))
-    fig.update_layout(title='Body Joints Angle Over Time', template='plotly_white', xaxis_title='Time', yaxis_title='Angle (degrees)', height=370, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color='white', family='changa'))
+    fig.add_trace(go.Scatter(
+        x=[i for i in range(0, len(list2))], y=list2, mode='lines', name='Shoulder'))
+    fig.add_trace(go.Scatter(
+        x=[i for i in range(0, len(list1))], y=list1, mode='lines', name='Hip'))
+    fig.update_layout(title='Body Joints Angle Over Time', template='plotly_white', xaxis_title='Time', yaxis_title='Angle (degrees)',
+                      height=370, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color='white', family='changa'))
     return fig
+
 
 video_dict = {
     "Kickboxing Workout": "https://www.youtube.com/embed/Hri2rYgOLKI?start=411",
@@ -76,11 +82,11 @@ video_dict = {
 }
 
 yt_input = html.Div([dmc.Center([
-                dmc.Col(
+    dmc.Col(
                     dmc.Select(
                         label="Select Video",
                         placeholder="Select one",
-                        style={'color':'white', "font-family":'changa'},
+                        style={'color': 'white', "font-family": 'changa'},
                         id="video-dropdown",
                         value=list(video_dict.values())[0],
                         data=[
@@ -88,23 +94,24 @@ yt_input = html.Div([dmc.Center([
                         ],
                         # style={"width": 200, "marginBottom": 10},
                     ), span=10
-                )
-            ]),
-            html.Br(),
-            dmc.Text("ENTER URL", color='white', weight=700, align='center'),
-            html.Br(),
-            dmc.Center([
-                dmc.Col([
-                    dmc.TextInput(label='Paste a Youtube URL Below', id='url-input'),
-                    dmc.Text(id="video-flag", style={"color": "red"}),
-                ], span=10)
-            ]),
-            html.Br(),
-            dmc.Center(
-                dmc.Button("Fetch", id='fetch-button', variant="filled"),
-            ),
-            html.Br(),
-],style={'border':'1px solid white'}
+                    )
+]),
+    html.Br(),
+    dmc.Text("ENTER URL", color='white', weight=700, align='center'),
+    html.Br(),
+    dmc.Center([
+        dmc.Col([
+            dmc.TextInput(
+                label='Paste a Youtube URL Below', id='url-input'),
+            dmc.Text(id="video-flag", style={"color": "red"}),
+        ], span=10)
+    ]),
+    html.Br(),
+    dmc.Center(
+    dmc.Button("Fetch", id='fetch-button', variant="filled"),
+),
+    html.Br(),
+], style={'border': '1px solid white'}
 )
 
 yt_video = html.Div([
@@ -114,92 +121,97 @@ yt_video = html.Div([
                     src=list(video_dict.values())[0],
                     width=850,
                     height=339,
-                )
+                    )
     )
 ])
 
 model_input = html.Div([
-                dmc.Col(
-                    dmc.Text("Model Settings", color='white')
-                ),
-                dmc.Center([
-                    dmc.Col(
-                        dmc.NumberInput(
-                            id='starttime-input',
-                            label="Start Time (s): ",
-                            value=0,
-                            min=0,
-                            style={"color": 'white'},
-                        ), span=10
-                    )
-                ]),
-                dmc.Center([
-                    dmc.Col(
-                        dmc.NumberInput(
-                            id='duration-input',
-                            label="Duration (s): ",
-                            value=5,
-                            min=1,
-                            max=10,
-                            style={"color": 'white', "font-family":'changa'},
-                        ), span=10
-                    )
-                ]),
-                dmc.Center([
-                    dmc.Col([
-                        dmc.Text('Detection Confidence: ', color='white'),
-                        dmc.Slider(
-                            id="detection-slider",
-                            value=5,
-                            min=0, max=10, step=0.5,
-                            style={"width": 250},
-                        )
-                    ], span=10)
-                ]),
-                dmc.Center([
-                    dmc.Col([
-                        dmc.Text('Tracking Confidence: ', color='white'),
-                        dmc.Slider(
-                            id="tracking-slider",
-                            value=5,
-                            min=0, max=10, step=0.5,
-                            style={"width": 250},
-                        )
-                    ], span=10)
-                ]),
-                dmc.Space(h=20),
-], style={'border':'1px solid white'})
+    dmc.Col(
+        dmc.Text("Model Settings", color='white')
+    ),
+    dmc.Center([
+        dmc.Col(
+            dmc.NumberInput(
+                id='starttime-input',
+                label="Start Time (s): ",
+                value=0,
+                min=0,
+                style={"color": 'white'},
+            ), span=10
+        )
+    ]),
+    dmc.Center([
+        dmc.Col(
+            dmc.NumberInput(
+                id='duration-input',
+                label="Duration (s): ",
+                value=5,
+                min=1,
+                max=10,
+                style={"color": 'white', "font-family": 'changa'},
+            ), span=10
+        )
+    ]),
+    dmc.Center([
+        dmc.Col([
+            dmc.Text('Detection Confidence: ', color='white'),
+            dmc.Slider(
+                id="detection-slider",
+                value=5,
+                min=0, max=10, step=0.5,
+                style={"width": 250},
+            )
+        ], span=10)
+    ]),
+    dmc.Center([
+        dmc.Col([
+            dmc.Text('Tracking Confidence: ', color='white'),
+            dmc.Slider(
+                id="tracking-slider",
+                value=5,
+                min=0, max=10, step=0.5,
+                style={"width": 250},
+            )
+        ], span=10)
+    ]),
+    dmc.Space(h=20),
+], style={'border': '1px solid white'})
 
 export_card = html.Div([
-                dmc.Col(
-                    dmc.Text("Export Output", color='white', style={"fontSize": 20})
-                ),
-                dmc.Center([
-                    dmc.Col([
-                        html.Br(),
-                        html.Br(),
-                        dmc.Center(DashIconify(icon="el:download", width=90, color='green')),
-                        html.Br(),
-                        html.Br(),
-                        dmc.Center(dmc.Button('Dowload GIF', id='download-button')),
-                        dcc.Download(id='download-image')
-                    ], span=10)
-                ]),
+    dmc.Col(
+        dmc.Text("Export Output", color='white',
+                 style={"fontSize": 20})
+    ),
+    dmc.Center([
+        dmc.Col([
+            html.Br(),
+            html.Br(),
+            dmc.Center(DashIconify(icon="el:download",
+                                   width=90, color='green')),
+            html.Br(),
+            html.Br(),
+            dmc.Center(dmc.Button(
+                'Dowload GIF', id='download-button')),
+            dcc.Download(id='download-image')
+        ], span=10)
+    ]),
 
-], style={'border':'1px solid white', 'height':'380px'})
+], style={'border': '1px solid white', 'height': '380px'})
 
 output_body = html.Div([
-                dmc.Grid([
-                        dmc.Col([
-                            export_card
-                        ], span=3),
-                        dmc.Col([
-                            dmc.LoadingOverlay(dmc.Image(id='model-output', height=380, style={'max-width':'810'}), loaderProps={"variant": "bars", "size": "xl"})
-                        ], span=6),
-                        dmc.Col([
-                            dcc.Graph(id='line-graph', config={'displaylogo':False}, style={'height':375})
-                        ], span=3, style={'border':'1px solid white'}),
-                    ])
+    dmc.Grid([
+        dmc.Col([
+            export_card
+        ], span=3),
+        dmc.Col([
+            dmc.LoadingOverlay(dmc.Image(id='model-output', height=380, style={
+                'max-width': '810'}), loaderProps={"variant": "bars", "size": "xl"})
+        ], span=6),
+        dmc.Col([
+            dcc.Graph(id='line-graph',
+                      config={'displaylogo': False}, style={'height': 375})
+        ], span=3, style={'border': '1px solid white'}),
+    ])
 ], id='output-div', style={"visibility": "hidden"})
 
 
@@ -221,26 +233,28 @@ app.layout = dmc.Container([
     html.Hr(),
     dmc.Space(h=30),
     dmc.Grid([
-            dmc.Col([
+        dmc.Col([
                 yt_input
-            ], span=3),
-            dmc.Col([
+                ], span=3),
+        dmc.Col([
                 yt_video
-            ], span=6),
-            dmc.Col(
-                model_input,
-                span=3
-            ),
+                ], span=6),
+        dmc.Col(
+            model_input,
+            span=3
+        ),
     ]),
     dmc.Space(h=30),
     dmc.Center(
-        dmc.Button("Run Model", id="run-model-button", variant='filled', size='lg',style={'background': '#5cb874'})
+        dmc.Button("Run Model", id="run-model-button", variant='filled',
+                   size='lg', style={'background': '#5cb874'})
     ),
     dmc.Space(h=30),
     dcc.Store(id='output-path'),
-    dmc.LoadingOverlay(output_body, loaderProps={"variant": "bars", "size": "xl"}),
+    dmc.LoadingOverlay(output_body, loaderProps={
+                       "variant": "bars", "size": "xl"}),
     dmc.Space(h=30)
-], fluid=True, style={'backgroundColor':'#111b2b','overflow-y':'hidden'})
+], fluid=True, style={'backgroundColor': '#111b2b', 'overflow-y': 'hidden'})
 
 
 # -----------------------------------------APP CALLBAKCS----------------------------------------------------------------
@@ -252,7 +266,6 @@ app.layout = dmc.Container([
     Input("fetch-button", "n_clicks"),
     State("url-input", "value")
 )
-
 def update_video(url, n_clicks, url2):
     # using callback context to check which input was fired
     ctx = callback_context
@@ -282,6 +295,8 @@ def update_video(url, n_clicks, url2):
         return url, ""
 
 # Disable fetch button when input is empty
+
+
 @app.callback(Output("fetch-button", "disabled"), Input("url-input", "value"))
 def button_flag(value):
     if value:
@@ -290,6 +305,8 @@ def button_flag(value):
         return True
 
 # callback for updating timestamps of youtube videos
+
+
 @app.callback(
     Output("starttime-input", "value"),
     Output("duration-input", "value"),
@@ -307,6 +324,8 @@ def update_time(url, n_clicks):
         return int(url[-3:]), 2
 
 # Download GIF
+
+
 @app.callback(
     Output("download-image", "data"),
     Input("download-button", "n_clicks"),
@@ -320,6 +339,8 @@ def func(n_clicks, path):
         )
 
 # running model
+
+
 @app.long_callback(
     Output("model-output", "src"),
     Output("output-path", "data"),
@@ -332,12 +353,13 @@ def func(n_clicks, path):
     State("detection-slider", "value"),
     State("tracking-slider", "value"),
     running=[
-            (Output("run-model-button", "disabled"), True, False),
-            (Output("run-model-button", "children"), "Running Model", "Run Model"),
-            (Output("output-div", "style"), {"visibility": "hidden"}, {"visibility": "visible"})
-        ],
+        (Output("run-model-button", "disabled"), True, False),
+        (Output("run-model-button", "children"), "Running Model", "Run Model"),
+        (Output("output-div", "style"),
+         {"visibility": "hidden"}, {"visibility": "visible"})
+    ],
     manager=long_callback_manager,
-    prevent_initial_call = True
+    prevent_initial_call=True
 )
 def show_output(nClicks, url, start, duration, detectionCon, trackingCon):
     print('Running')
@@ -356,14 +378,15 @@ def show_output(nClicks, url, start, duration, detectionCon, trackingCon):
         print(video)
         urlPafy = pafy.new(video)
         videoplay = urlPafy.getbest(preftype="any")
-        print("URL",videoplay.url)
+        print("URL", videoplay.url)
         cap = cv2.VideoCapture(videoplay.url)
         # cap = cv2.VideoCapture(0)
         milliseconds = 1000
         end_time = start + duration
         cap.set(cv2.CAP_PROP_POS_MSEC, start * milliseconds)
         pTime = 0
-        detector = poseDetector(detectionCon=detectionCon/10, trackCon=trackingCon/10)
+        detector = poseDetector(
+            detectionCon=detectionCon/10, trackCon=trackingCon/10)
         frames = []
 
         angle_list1 = []
@@ -386,14 +409,15 @@ def show_output(nClicks, url, start, duration, detectionCon, trackingCon):
 
             # show fps count
             cv2.putText(
-                img, 'FPS:'+str(int(fps)), (120, 90), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2
+                img, 'FPS:' +
+                str(int(fps)), (120, 90), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2
             )
             frames.append(img)
 
         print("Saving GIF file")
-        filename=str(random.random())
+        filename = str(random.random())
         print(filename)
-        with imageio.get_writer("..//Posture-Analysis-Dashboard//assets//model_runtime_output/output{}.gif".format(filename), mode="I") as writer:
+        with imageio.get_writer("..//workout_analyzer//assets//model_runtime_output/output{}.gif".format(filename), mode="I") as writer:
             for frame in frames:
                 rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 writer.append_data(rgb_frame)
